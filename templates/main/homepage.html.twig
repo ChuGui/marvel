@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+{% block stylesheets %}
+	{{ encore_entry_link_tags('homepage') }}
+{% endblock %}
+
+{% block body %}
+	
+	<div class="example-wrapper">
+		<h1>Hello {{ controller_name }}! ✅</h1>
+		
+		This friendly message is coming from:
+		<ul>
+			<li>Your controller at <code><a
+							href="{{ 'C:/wamp64/www/marvel/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code>
+			</li>
+			<li>Your template at <code><a
+							href="{{ 'C:/wamp64/www/marvel/templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code>
+			</li>
+		</ul>
+		<div class="container">
+			<div class="row">
+				<div class="col">Helo</div>
+				<div class="col">fdsqf</div>
+				<div class="col">fdsqf</div>
+			</div>
+		</div>
+	</div>
+	
+	{% block javascripts %}
+		{{ encore_entry_script_tags('homepage') }}
+	{% endblock %}
+{% endblock %}
