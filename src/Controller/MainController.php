@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\MarvelApi;
+use App\Service\Paginator;
 
 class MainController extends AbstractController
 {
@@ -18,15 +19,23 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/show", name="show")
-     * @param MarvelApi $characters
+     * @Route("/show/{page}", name="show", requirements={"page"="\d+"})
+     * @param $page
+     * @param MarvelApi $marvelApi
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showApiAnswer(MarvelApi $marvelApi){
+    public function showApiAnswer($page = null, MarvelApi $marvelApi, Paginator $paginator){
+        if($page === null){
+            $characters = $marvelApi->getCharacters();
+        }else{
+            $characters = $paginator->showElts(8, $page, $marvelApi->getCharacters());
+        }
+        
+        $totalCharacters = count($characters)/8;
 
-        $character = $marvelApi->getCharacter();
-        dump($character);die;
         return $this->render('main/show.html.twig', [
+            'characters' => $characters,
+            'totalCharacters' => $totalCharacters
         ]);
     }
 

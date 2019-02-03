@@ -10,20 +10,28 @@ class MarvelApi {
 
     private $secretKey;
 
+    private $timestamp;
+
+    private $hash;
+
+    private $apiKey;
+
     public function __construct($marvelSecretApikey, $marvelPublicApikey)
     {
         $this->publicKey = $marvelPublicApikey;
         $this->secretKey = $marvelSecretApikey;
+        $this->timestamp = time();
+        $this->hash = md5($this->timestamp . $this->secretKey . $this->publicKey);
+        $this->apiKey = 'ts=' . $this->timestamp .'&apikey='. $this->publicKey .'&hash='. $this->hash;
+
     }
 
-    public function getCharacter($name = null) {
-//        Search a caracter from name
+    //Get the 20 first characters from the 100th character
+    public function getCharacters() {
 
-//        $headers = ['Accept' => 'application/json'];
-//        $query = ['' => ''];
-//
-//        $caracter = Unirest\Request::get('http://gateway.marvel.com/v1/public/comics?ts=1&apikey=1234&hash=ffd275c5130566a2916217b101f26150');
-        return $this->secretKey;
+        $caracters = Unirest\Request::get('http://gateway.marvel.com/v1/public/characters?limit=20&offset=100&' . $this->apiKey);
+        $caracters = $caracters->body->data->results;
+        return  $caracters;
     }
 
 
