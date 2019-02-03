@@ -7,12 +7,10 @@
 
 // any CSS you require will output into a single css file (app.css in this case)
 import '../css/base.scss';
-
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 import $ from 'jquery';
 
-$(document).ready(function(){
-    $('body').append("<h1>Hello</h1>");
-});
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

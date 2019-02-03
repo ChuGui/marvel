@@ -29,9 +29,15 @@ class MarvelApi {
     //Get the $numberOfCharacters first characters from the offset th character
     public function getCharacters(int $numberOfCharacters, int $offset) {
 
-        $caracters = Unirest\Request::get("http://gateway.marvel.com/v1/public/characters?limit=$numberOfCharacters&offset=$offset&" . $this->apiKey);
-        $caracters = $caracters->body->data->results;
-        return  $caracters;
+        $characters = Unirest\Request::get("http://gateway.marvel.com/v1/public/characters?limit=$numberOfCharacters&offset=$offset&" . $this->apiKey);
+        $characters = $characters->body->data->results;
+        return  $characters;
+    }
+
+    public function getOneCaracterById($id) {
+        $character = Unirest\Request::get("http://gateway.marvel.com/v1/public/characters/$id?" . $this->apiKey);
+
+        return $character;
     }
 
 

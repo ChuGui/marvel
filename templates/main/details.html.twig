@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des personnages{% endblock %}
+{% block stylesheets %}
+	{{ encore_entry_link_tags('show') }}
+{% endblock %}
+
+{% block body %}
+	
+	<div class="container mt-5 mb-5">
+		<div class="jumbotron bg-details">
+			<h1><span class="text-danger">{{ character.name }}</span></h1>
+			<div class="row">
+				<div class="col-md-6">
+					<img class="card-img-top"
+					     src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
+					     alt="{{ character.name }}-image">
+				</div>
+				<div class="col-md-6">
+					<div class="bg-carbon text-white p-3">
+						<h2 class="font-weight-bold mb-3">Description :</h2>
+						{% if character.description is empty %}
+							<p class="h4 font-italic">"This character has no description yet"</p>
+						{% else %}
+							<p class="h4 font-italic">"{{ character.description }}"</p>
+						{% endif %}
+					</div>
+					
+				</div>
+			</div>
+		
+			<div class="mt-5 ">
+				<h2>Nombre des comics où {{ character.name }} apparaît : <span class="badge badge-success">{{ character.comics.available }}</span></h2>
+				<h3 class="mb-3">Liste des 3 premiers comics où vous retrouverez {{ character.name }} !</h3>
+				<ul class="list-group">
+					{% for comic in character.comics.items|slice(0,3) %}
+					<li class="list-group-item">{{ comic.name }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="mt-3">
+				<a href="{{ path('show', {'page': 1 }) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i>Retour</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	{% block javascripts %}
+		{{ encore_entry_script_tags('show') }}
+	{% endblock %}
+{% endblock %}

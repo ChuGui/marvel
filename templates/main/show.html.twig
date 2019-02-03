@@ -9,18 +9,22 @@
 	
 	<div class="example-wrapper">
 		<div class="container">
-			{{ dump(characters) }}
 			{#============ LES CARTES DES PERSONNAGES ===========#}
 			<div class="row">
-				
 				{% for character in characters %}
 					<div class="col-md-3 mb-3">
 						<div class="card">
+							<a href="{{ path('show_details', {'id' : character.id}) }}">
 							<img class="card-img-top"
 							     src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
 							     alt="{{ character.name }}-image">
+							</a>
+							
+							
 							<div class="card-body">
-								<h5 class="card-title">{{ character.name }}</h5>
+								<h5 class="card-title" data-toggle="">
+									<a href="{{ path('show_details', {'id' : character.id}) }}">{{ character.name }}</a>
+									</h5>
 								<p class="card-text">
 									{% if character.description is empty %}
 										This character has no description yet
@@ -28,7 +32,7 @@
 										{{ character.description }}
 									{% endif %}
 								</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
+								<a href="{{ path('show_details', {'id' : character.id}) }}" class="btn btn-primary"><i class="fas fa-address-card"></i>&nbsp;Voir la fiche</a>
 							</div>
 						</div>
 					</div>
@@ -66,7 +70,6 @@
 						<a href="{{ path('show') }}" class="btn btn-primary">Afficher tous les personnages sur une seule
 							page</a>
 					</div>
-				
 				</nav>
 			
 			{% else %}

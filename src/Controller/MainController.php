@@ -46,5 +46,25 @@ class MainController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/{id}", name="show_details", requirements={"id" = "\d+"})
+     * @param $id
+     * @param MarvelApi $marvelApi
+     * @return
+     * @throws \Exception
+     */
+    public function showDetails($id, MarvelApi $marvelApi){
+
+        $character = $marvelApi->getOneCaracterById($id);
+        if($character->code == 404){
+            $this->addFlash('danger', "L'id fournit ne correspond à aucun personnage");
+            throw new \Exception("L'id fournit ne correspond à aucun personnage");
+        };
+
+        return $this->render('main/details.html.twig', [
+            'character' => $character->body->data->results[0]
+        ]);
+    }
+
 
 }

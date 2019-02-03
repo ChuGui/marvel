@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 404{% endblock %}
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5 mb-5">
+		<div class="jumbotron bg-secondary">
+			<h1>Page not found <span class="text-danger">Error 404</span></h1>
+			<div class="row">
+				<div class="col-md-6">
+					<img class="rounded" src="{{ asset('images/deadpool.gif') }}" alt="deadpool">
+				</div>
+				<div class="col-md-6">
+					<p class="h1">Tu es perdu ?</p>
+					{% for label, messages in app.flashes %}
+						<div class="container">
+							<div class="alert alert-{{ label }}">
+								{% for message in messages %}
+									<p>{{ message | raw }}</p>
+								{% endfor %}
+							</div>
+						</div>
+					{% endfor %}
+					<p class="h3">
+						Il semblerait que ce que tu cherches n'est pas ici !
+					</p>
+					<p><a href="{{ path('homepage') }}" class="btn btn-primary">Retour à
+							l'accueil</a></p>
+				</div>
+			</div>
+		</div>
+	
+	
+	</div>
+	
+	
+	{% block javascripts %}
+	{% endblock %}
+{% endblock %}
