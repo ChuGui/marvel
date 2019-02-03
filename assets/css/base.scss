@@ -1,4 +1,19 @@
 @import "~bootstrap/scss/bootstrap";
 body {
     background-color: lightgrey;
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    footer {
+        color: white;
+        background: none;
+    }
+}
+
+.logo {
+    height: 100px;
+}
+.background-marvel {
+    background-image: url('../images/marvel-header.png');
+    background-repeat: repeat;
+    background-size: contain;
 }

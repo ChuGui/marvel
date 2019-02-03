@@ -8,8 +8,10 @@
 	{% endblock %}
 </head>
 <body>
+{% include 'partials/header.html.twig' %}
 {% block body %}{% endblock %}
 {{ encore_entry_script_tags('base') }}
+{% include 'partials/footer.html.twig' %}
 {% block javascripts %}
 {% endblock %}
 </body>

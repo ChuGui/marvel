@@ -15,7 +15,7 @@ class Paginator {
     public function showElts($length, $page, $array){
 
         $numberOfElts = $length;
-        $offset = $page * 8;
+        $offset = ($page - 1) * 8;
         $elts = array_slice($array, $offset, $numberOfElts);
 
         return $elts;

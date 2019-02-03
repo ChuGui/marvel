@@ -26,10 +26,10 @@ class MarvelApi {
 
     }
 
-    //Get the 20 first characters from the 100th character
-    public function getCharacters() {
+    //Get the $numberOfCharacters first characters from the offset th character
+    public function getCharacters(int $numberOfCharacters, int $offset) {
 
-        $caracters = Unirest\Request::get('http://gateway.marvel.com/v1/public/characters?limit=20&offset=100&' . $this->apiKey);
+        $caracters = Unirest\Request::get("http://gateway.marvel.com/v1/public/characters?limit=$numberOfCharacters&offset=$offset&" . $this->apiKey);
         $caracters = $caracters->body->data->results;
         return  $caracters;
     }
