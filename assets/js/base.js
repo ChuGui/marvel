@@ -11,6 +11,38 @@ require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 import $ from 'jquery';
+import Barba from 'barba.js';
 
+$('.haveLoader').on('click', function(){
+    $(this).replaceWith('<div class="loader" id="loader-6">\n' +
+        '          <span></span>\n' +
+        '          <span></span>\n' +
+        '          <span></span>\n' +
+        '          <span></span>\n' +
+        '        </div>');
+});
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+/*=======TRANSITION=========*/
+/*======USING BARBA.JS======*/
+$('document').ready(function(){
+    let transEffect = Barba.BaseTransition.extend({
+        start: function(){
+            this.newContainerLoading.then(val => this.fadeInNewcontent($(this.newContainer)));
+        },
+        fadeInNewcontent : function(nc){
+            nc.hide();
+            let _this = this;
+            $(this.oldContainer).fadeOut(1000).promise().done(() => {
+                nc.css('visibility', 'visible');
+                nc.fadeIn(500,function(){
+                    _this.done();
+                })
+
+            });
+        }
+    });
+    Barba.Pjax.getTransition = function() {
+        return transEffect;
+    };
+    Barba.Pjax.start();
+});

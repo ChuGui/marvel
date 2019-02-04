@@ -7,18 +7,20 @@
 
 {% block body %}
 	
-	<div class="example-wrapper">
-		<h1></h1>
-		
-		
+	<!-- The video -->
+	
 		<div class="container">
-			<div class="row">
-				<div class="col">Helo</div>
-				<div class="col">fdsqf</div>
-				<div class="col">fdsqf</div>
+			<video autoplay muted id="myVideo">
+				<source src="{{ asset('videos/marvel-intro.webm') }}" type="video/webm">
+			</video>
+			<div class="start-btn-container text-center mt-5">
+				<a id="start-btn" href="{{ path('show', {'page' : 1}) }}" class="btn btn-success haveLoader">COMMENCER</a>
 			</div>
 		</div>
-	</div>
+		
+		
+		
+	
 	
 	{% block javascripts %}
 		{{ encore_entry_script_tags('homepage') }}

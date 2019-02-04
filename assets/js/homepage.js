@@ -8,7 +8,12 @@
 // any CSS you require will output into a single css file (app.css in this case)
 import '../css/homepage.scss';
 
+import $ from 'jquery';
 
-console.log("Hello Webpack Encore! Edit me in assets/js/homepage.js");
+$('#myVideo').on('ended click', function(){
+    $(this).hide('slow');
+    $('.start-btn-container').show();
+});
+
 
 
