@@ -19,7 +19,7 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/show/{page}/{numberOfCharacters}/{offset}", name="show", requirements={"page"="\d+", "numberOfCharacters"="\d+", "offset"="\d+"})
+     * @Route("/show/{page}/{numberOfCharacters}/{offset}", name="show_characters", requirements={"page"="\d+", "numberOfCharacters"="\d+", "offset"="\d+"})
      * @param $page
      * @param int $numberOfCharacters
      * @param int $offset
@@ -58,7 +58,7 @@ class MainController extends AbstractController
         $character = $marvelApi->getOneCaracterById($id);
         if($character->code == 404){
             $this->addFlash('danger', "L'id fournit ne correspond à aucun personnage");
-            throw new \Exception("L'id fournit ne correspond à aucun personnage");
+            throw new \HttpException("L'id fournit ne correspond à aucun personnage", '500');
         };
 
         return $this->render('main/details.html.twig', [

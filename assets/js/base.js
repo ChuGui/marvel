@@ -24,6 +24,7 @@ $('.haveLoader').on('click', function(){
 
 /*=======TRANSITION=========*/
 /*======USING BARBA.JS======*/
+/*
 $('document').ready(function(){
     let transEffect = Barba.BaseTransition.extend({
         start: function(){
@@ -45,4 +46,4 @@ $('document').ready(function(){
         return transEffect;
     };
     Barba.Pjax.start();
-});
+});*/

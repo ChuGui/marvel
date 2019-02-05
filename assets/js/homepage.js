@@ -9,11 +9,15 @@
 import '../css/homepage.scss';
 
 import $ from 'jquery';
+function closeVideo(){
+        $('#myVideo').on('ended click', function () {
+            $(this).hide('slow');
+            $('.start-btn-container').show();
+        });
+}
 
-$('#myVideo').on('ended click', function(){
-    $(this).hide('slow');
-    $('.start-btn-container').show();
-});
+$('document').ready(closeVideo);
+
 
 
 
