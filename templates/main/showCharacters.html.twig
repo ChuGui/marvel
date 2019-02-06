@@ -7,82 +7,170 @@
 
 {% block body %}
 	
-	<form action="{{ path('show_characters_form' )}}">
-		
-		<input type="text">
-	</form>
-	
-	<div class="example-wrapper">
-		<div class="container">
-			{#============ LES CARTES DES PERSONNAGES ===========#}
-			<div class="row">
-				{% for character in characters %}
-					<div class="col-md-6 col-lg-3 mb-3">
-						<div class="card">
-							<a href="{{ path('show_details', {'id' : character.id}) }}">
-							<img class="card-img-top"
-							     src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
-							     alt="{{ character.name }}-image">
-							</a>
-							
-							
-							<div class="card-body">
-								<h5 class="card-title" data-toggle="">
-									<a href="{{ path('show_details', {'id' : character.id}) }}">{{ character.name }}</a>
-									</h5>
-								<p class="card-text">
-									{% if character.description is empty %}
-										This character has no description yet
-									{% else %}
-										{{ character.description }}
-									{% endif %}
-								</p>
-								<a href="{{ path('show_details', {'id' : character.id}) }}" class="btn btn-primary haveLoader"><i class="fas fa-address-card"></i>&nbsp;Voir la fiche</a>
+	<div class="container mb-5">
+		<div class="container bg-dark rounded">
+			<h1 class="text-white">Retrouvez ici tous vos personnages marvel préférés !</h1>
+			<p class="text-white font-italic">Total de personnages disponibles : {{ totalCharacters }} <i
+						class="fas fa-users"></i></p>
+			
+			{#FORMULAIRE DE RECHERCHE PAR NOMBRE DE PERSONNAGE#}
+			<h2 class="text-white">Choisissez le nombre de personnages que vous voulez afficher :</h2>
+			<div class="form-container bg-dark p-3 rounded">
+				{{ form_start(charactersForm) }}
+				<div class="row text-white">
+					<div class="col-5">
+						<div class="row">
+							<div class="col-6 text-right">
+								{{ form_label(charactersForm.charactersQty, null,  {'label' : 'Nombre de personnages voulu :'}) }}
+								<p class="font-italic">Quantité max: 100</p>
+							</div>
+							<div class="col-4">
+								{{ form_row(charactersForm.charactersQty) }}
 							</div>
 						</div>
 					</div>
-				{% endfor %}
-			</div>
-			
-			{#================ LA PAGINATION ======================#}
-			
-			{% if page is not empty %}
-				
-				<nav aria-label="Page navigation">
-					<ul class="pagination justify-content-center">
-						{% if page == 1 %}
-							<li class="page-item disabled"><a class="page-link"
-							                                  href="">Previous</a>
-							</li>
-						{% else %}
-							<li class="page-item"><a class="page-link"
-							                         href="{{ path( 'show' , {'page' : page - 1}) }}">Previous</a>
-							</li>
-						{% endif %}
-						{% for i in 0..totalPages %}
-							<li class="page-item {% if page == loop.index %}active{% endif %} haveLoader"><a class="page-link"
-							                         href="{{ path( 'show' , {'page' : loop.index}) }}">{{ loop.index }}</a>
-							</li>
-						{% endfor %}
-						{% if page >= totalPages  %}
-							<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-						{% else %}
-							<li class="page-item"><a class="page-link" href="{{ path( 'show' , {'page' : page + 1}) }}">Next</a></li>
-						{% endif %}
-					</ul>
-					<div class="text-center">
-						
-						<a href="{{ path('show') }}" class="btn btn-primary">Afficher tous les personnages sur une seule
-							page</a>
+					<div class="col-5">
+						<div class="row">
+							<div class="col-6 text-right">
+								{{ form_label(charactersForm.offset, null, {'label' : 'A partir de :'}) }}
+							</div>
+							<div class="col-4">
+								{{ form_row(charactersForm.offset) }}
+							</div>
+						</div>
+					
 					</div>
-				</nav>
-			
-			{% else %}
-				<div class="text-center">
-					<a href="{{ path('show', {'page' : 1 }) }}" class="btn btn-primary">Afficher la pagination</a>
+					<div class="col-2">
+						<button type="submit" class="btn btn-success">Chercher</button>
+					</div>
 				</div>
-			{% endif %}
+				{{ form_end(charactersForm) }}
+			</div>
+			<hr>
+			
+			{#Formulaire de recherche par Nom du personnage#}
+			<h2 class="text-white">Cherchez un personnage par nom</h2>
+			<div class="form-container bg-dark p-3 rounded">
+				{{ form_start(characterForm) }}
+				<div class="row text-white">
+					<div class="col-10">
+						<div class="row">
+							<div class="col-4">
+								{{ form_label(characterForm.name, null,  {'label' : 'Nom du personnage recherché :'}) }}
+							</div>
+							<div class="col-4">
+								{{ form_row(characterForm.name) }}
+							</div>
+						</div>
+						{% for label, messages in app.flashes %}
+							<div class="container">
+								<div class="alert alert-{{ label }}">
+									{% for message in messages %}
+										<p>{{ message | raw }}</p>
+									{% endfor %}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="col-2">
+						<button type="submit" class="btn btn-success">Chercher</button>
+					</div>
+					{{ form_end(characterForm) }}
+				</div>
+			</div>
 		</div>
+	</div>
+	
+	<div class="container">
+		{#============ LES CARTES DES PERSONNAGES ===========#}
+		<div class="row">
+			{% for character in characters %}
+				<div class="col-md-6 col-lg-3 mb-3">
+					<div class="card">
+						<a href="{{ path('show_details', {'id' : character.id}) }}">
+							<img class="card-img-top"
+							     src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
+							     alt="{{ character.name }}-image">
+						</a>
+						
+						
+						<div class="card-body">
+							<h5 class="card-title" data-toggle="">
+								<a href="{{ path('show_details', {'id' : character.id}) }}">{{ character.name }}</a>
+							</h5>
+							<p class="card-text">
+								{% if character.description is empty %}
+									This character has no description yet
+								{% else %}
+									{{ character.description }}
+								{% endif %}
+							</p>
+							<a href="{{ path('show_details', {'id' : character.id}) }}"
+							   class="btn btn-primary haveLoader"><i class="fas fa-address-card"></i>&nbsp;Voir la fiche</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		
+		{#================ LA PAGINATION ======================#}
+		{% if page is not empty %}
+			
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center">
+					{% if page == 1 %}
+						<li class="page-item disabled"><a class="page-link"
+						                                  href="">Previous</a>
+						</li>
+					{% else %}
+						<li class="page-item">
+							<a class="page-link" href="{{ path(
+								'show_characters' , {
+									'page' : page - 1,
+									'charactersQty': charactersQty,
+									'offset': offset}) }}">
+								Previous
+							</a>
+						</li>
+					{% endif %}
+					{% for i in 0..totalPages %}
+						<li class="page-item {% if page == loop.index %}active{% endif %} haveLoader"><a
+									class="page-link"
+									href="{{ path( 'show_characters' , {
+										'page' : loop.index,
+										'charactersQty': charactersQty,
+										'offset': offset}) }}">
+								{{ loop.index }}
+							</a>
+						</li>
+					{% endfor %}
+					{% if page >= totalPages %}
+						<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+					{% else %}
+						<li class="page-item"><a class="page-link"
+						                         href="{{ path( 'show_characters', {
+							                         'page' : page + 1,
+							                         'charactersQty': charactersQty,
+							                         'offset': offset}) }}">
+								Next
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+				<div class="text-center">
+					
+					<a href="{{ path('show_characters') }}" class="btn btn-primary">Afficher tous les personnages sur
+						une seule
+						page</a>
+				</div>
+			</nav>
+		
+		{% else %}
+			<div class="text-center">
+				<a href="{{ path('show_characters', {'page' : 1 }) }}" class="btn btn-primary">Afficher la
+					pagination</a>
+			</div>
+		{% endif %}
 	</div>
 	
 	{% block javascripts %}
