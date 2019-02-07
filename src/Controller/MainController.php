@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\MarvelApi;
 use App\Service\Paginator;
 
+
 class MainController extends AbstractController
 {
     /**
@@ -33,7 +34,7 @@ class MainController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showCharacters( $page = null, $charactersQty = 20, $offset = 100, MarvelApi $marvelApi, Paginator $paginator, Request $request)
+    public function showCharacters( $page = 1, $charactersQty = 20, $offset = 100, MarvelApi $marvelApi, Paginator $paginator, Request $request)
     {
         //Si les personnages ne sont pas fournit on télécharge 20 personnages à partir du 100ème par défaut
         $characters = $marvelApi->getCharacters($charactersQty, $offset);
@@ -42,10 +43,8 @@ class MainController extends AbstractController
         //On affiche 8 éléments par pages, on pourrait proposer à l'utilisateur le nombre d'élément à afficher par page
         $totalPages = count($characters) / 8;
 
-        // Si le numéro de page est fourni, on utilise le paginator, sinon tout les personnages seront affichés sur une seule page
-        if ($page) {
-            $characters = $paginator->showElts(8, $page, $characters);
-        }
+        //On utilise le paginator
+        $characters = $paginator->showElts(8, $page, $characters);
 
         // Création et gestion  du formulaire pour la recherche par nombre de personnages
         $charactersForm = $this->createForm(CharactersType::class);
@@ -58,10 +57,9 @@ class MainController extends AbstractController
             return $this->redirectToRoute('show_characters', [
                 'charactersQty' => $charactersQty,
                 'offset' => $offset,
-                'page' => 1,
+                'page' => $page,
             ]);
         }
-
 
         //Création et gestion du formulaire pour la recherche par nom du personnage
         $characterForm = $this->createForm(CharacterType::class);
@@ -72,10 +70,17 @@ class MainController extends AbstractController
             $id = $marvelApi->getCharacterByName($name);
             if(!$id){
                 $this->addFlash('danger', "Désolé mais nous n'avons pas trouvé de personnage pour le nom '$name'");
-                return $this->redirectToRoute('show_characters');
+                return $this->redirectToRoute('show_characters',[
+                    'charactersQty' => $charactersQty,
+                    'offset' => $offset,
+                    'page' => $page
+                ]);
             }
             return $this->redirectToRoute('show_details', [
-               'id' => $id
+               'id' => $id,
+                'charactersQty' => $charactersQty,
+                'offset' => $offset,
+                'page' => $page
             ]);
         }
 
@@ -92,15 +97,18 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show_details", requirements={"id" = "\d+"})
+     * Permet de voir le détail d'un personnage
+     * @Route("/{id}/{charactersQty}/{offset}/{page}", name="show_details", requirements={"id" = "\d+"})
      * @param $id
+     * @param int $charactersQty
+     * @param int $offset
+     * @param int $page
      * @param MarvelApi $marvelApi
-     * @return
-     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \HttpException
      */
-    public function showDetails($id, MarvelApi $marvelApi)
+    public function showDetails($id,int $charactersQty,int $offset, int $page, MarvelApi $marvelApi)
     {
-        dump($id);
         $character = $marvelApi->getOneCaracterById($id);
         if ($character->code == 404) {
             $this->addFlash('danger', "L'id fournit ne correspond à aucun personnage");
@@ -108,7 +116,10 @@ class MainController extends AbstractController
         };
 
         return $this->render('main/details.html.twig', [
-            'character' => $character
+            'character' => $character->body->data->results[0],
+            'page' => $page,
+            'offset' => $offset,
+            'charactersQty' => $charactersQty
         ]);
     }
 

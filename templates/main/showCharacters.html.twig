@@ -87,7 +87,11 @@
 			{% for character in characters %}
 				<div class="col-md-6 col-lg-3 mb-3">
 					<div class="card">
-						<a href="{{ path('show_details', {'id' : character.id}) }}">
+						<a href="{{ path('show_details', {
+							'id' : character.id,
+							'charactersQty' : charactersQty,
+							'offset': offset,
+							'page' : page}) }}">
 							<img class="card-img-top"
 							     src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
 							     alt="{{ character.name }}-image">
@@ -96,7 +100,11 @@
 						
 						<div class="card-body">
 							<h5 class="card-title" data-toggle="">
-								<a href="{{ path('show_details', {'id' : character.id}) }}">{{ character.name }}</a>
+								<a href="{{ path('show_details', {
+									'id' : character.id,
+									'charactersQty' : charactersQty,
+									'offset': offset,
+									'page' : page}) }}">{{ character.name }}</a>
 							</h5>
 							<p class="card-text">
 								{% if character.description is empty %}
@@ -105,7 +113,11 @@
 									{{ character.description }}
 								{% endif %}
 							</p>
-							<a href="{{ path('show_details', {'id' : character.id}) }}"
+							<a href="{{ path('show_details', {
+								'id' : character.id,
+								'charactersQty' : charactersQty,
+								'offset': offset,
+								'page' : page}) }}"
 							   class="btn btn-primary haveLoader"><i class="fas fa-address-card"></i>&nbsp;Voir la fiche</a>
 						</div>
 					</div>
@@ -114,63 +126,50 @@
 		</div>
 		
 		{#================ LA PAGINATION ======================#}
-		{% if page is not empty %}
-			
-			<nav aria-label="Page navigation">
-				<ul class="pagination justify-content-center">
-					{% if page == 1 %}
-						<li class="page-item disabled"><a class="page-link"
-						                                  href="">Previous</a>
-						</li>
-					{% else %}
-						<li class="page-item">
-							<a class="page-link" href="{{ path(
-								'show_characters' , {
-									'page' : page - 1,
+		
+		
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-center">
+				{% if page == 1 %}
+					<li class="page-item disabled"><a class="page-link"
+					                                  href="">Previous</a>
+					</li>
+				{% else %}
+					<li class="page-item">
+						<a class="page-link" href="{{ path(
+							'show_characters' , {
+								'page' : page - 1,
+								'charactersQty': charactersQty,
+								'offset': offset}) }}">
+							Previous
+						</a>
+					</li>
+				{% endif %}
+				{% for i in 0..totalPages %}
+					<li class="page-item {% if page == loop.index %}active{% endif %} haveLoader"><a
+								class="page-link"
+								href="{{ path( 'show_characters' , {
+									'page' : loop.index,
 									'charactersQty': charactersQty,
 									'offset': offset}) }}">
-								Previous
-							</a>
-						</li>
-					{% endif %}
-					{% for i in 0..totalPages %}
-						<li class="page-item {% if page == loop.index %}active{% endif %} haveLoader"><a
-									class="page-link"
-									href="{{ path( 'show_characters' , {
-										'page' : loop.index,
-										'charactersQty': charactersQty,
-										'offset': offset}) }}">
-								{{ loop.index }}
-							</a>
-						</li>
-					{% endfor %}
-					{% if page >= totalPages %}
-						<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-					{% else %}
-						<li class="page-item"><a class="page-link"
-						                         href="{{ path( 'show_characters', {
-							                         'page' : page + 1,
-							                         'charactersQty': charactersQty,
-							                         'offset': offset}) }}">
-								Next
-							</a>
-						</li>
-					{% endif %}
-				</ul>
-				<div class="text-center">
-					
-					<a href="{{ path('show_characters') }}" class="btn btn-primary">Afficher tous les personnages sur
-						une seule
-						page</a>
-				</div>
-			</nav>
-		
-		{% else %}
-			<div class="text-center">
-				<a href="{{ path('show_characters', {'page' : 1 }) }}" class="btn btn-primary">Afficher la
-					pagination</a>
-			</div>
-		{% endif %}
+							{{ loop.index }}
+						</a>
+					</li>
+				{% endfor %}
+				{% if page >= totalPages %}
+					<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+				{% else %}
+					<li class="page-item"><a class="page-link"
+					                         href="{{ path( 'show_characters', {
+						                         'page' : page + 1,
+						                         'charactersQty': charactersQty,
+						                         'offset': offset}) }}">
+							Next
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+		</nav>
 	</div>
 	
 	{% block javascripts %}

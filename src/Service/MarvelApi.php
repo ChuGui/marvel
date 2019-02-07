@@ -70,7 +70,7 @@ class MarvelApi {
      */
     public function getOneCaracterById($id) {
         $character = Unirest\Request::get("http://gateway.marvel.com/v1/public/characters/$id?" . $this->apiKey);
-        return $character->body->data->results[0];
+        return $character;
     }
 
 
