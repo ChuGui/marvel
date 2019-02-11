@@ -18,7 +18,7 @@ class CharactersType extends AbstractType {
                 'label' => false,
                 'constraints' => new Length([
                     'min' => 8,
-                    'minMessage' => "Voyons... il faudrait que je puisse t'afficher au minimum 1 personnage :)",
+                    'minMessage' => "Minimum 8",
                     'max' => 100,
                     "maxMessage" => "Hop Hop Hop ! On a dit pas plus de 100 persos à la fois !"
                 ]),
